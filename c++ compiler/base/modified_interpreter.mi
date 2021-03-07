@@ -1,0 +1,55 @@
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+using namespace std;
+
+string filename = {FILENAME};
+string file_content = {FILE};
+
+int interpret(string fn){
+	fstream file;
+	file.open(fn, ios::in);
+	
+	if(!file){
+		cout << "No such file.";
+		return 1;
+	}
+	
+	string line;
+	while(getline(file, line)){
+		cout << line << "\n";
+	}
+	return 0;
+}
+
+string replace(string target, string find, string replace){
+	
+	size_t index = 0;
+	while (true) {
+		 index = target.find(find, index);
+		 if (index == string::npos) break;
+		 target.replace(index, find.length(), replace);
+		 index += find.length();
+	}
+	
+	return target;
+}
+
+int load(){
+	fstream file;
+	file.open(filename, ios::out);
+	file << replace(file_content, "~", "\n");
+	file.close();
+}
+
+int unload(){
+	const char * c = filename.c_str();
+	
+	const int result = remove(c);
+}
+
+int main(){
+	load();
+	interpret(filename);
+	unload();
+}
